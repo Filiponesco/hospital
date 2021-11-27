@@ -12,6 +12,11 @@
     <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
     <None Remove="Microsoft.EntityFrameworkCore.Tools" />
     <None Remove="Swashbuckle.AspNetCore" />
+    <None Remove="Entities\" />
+    <None Remove="Services\" />
+    <None Remove="Models\" />
+    <None Remove="Validators\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
@@ -24,5 +29,12 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="Services\" />
+    <Folder Include="Models\" />
+    <Folder Include="Validators\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>
