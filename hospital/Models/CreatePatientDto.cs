@@ -17,6 +17,10 @@ namespace hospital.Models
         [MaxLength(250)]
         [MinLength(1)]
         public string LastName { get; set; }
+        [Required]
+        [MaxLength(250)]
+        [MinLength(1)]
+        public string Password { get; set; }
         public readonly int RoleId = 2;
 
     }

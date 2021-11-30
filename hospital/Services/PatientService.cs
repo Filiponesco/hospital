@@ -43,7 +43,7 @@ namespace hospital.Services
                 LastName = dto.LastName,
                 RoleId = dto.RoleId
             };
-            var hashedPassword = _passwordHasher.HashPassword(newUser, RandomStringGenerator.RandomString(6));
+            var hashedPassword = _passwordHasher.HashPassword(newUser, dto.Password);
 
             newUser.Password = hashedPassword;
             var savedUser = _dbContext.Users.Add(newUser);
