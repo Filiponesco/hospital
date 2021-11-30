@@ -8,7 +8,7 @@ namespace hospital.Services
 {
     public interface IDoctorService {
         int Create(CreateDoctorDto dto);
-        CreateDoctorResponseDto GenerateJwt(LoginDoctorDto dto);
+        LoginResponseDto GenerateJwt(LoginDto dto);
     }
 
     public class DoctorService : IDoctorService
@@ -43,7 +43,7 @@ namespace hospital.Services
             return newUser.Id;
         }
 
-        public CreateDoctorResponseDto GenerateJwt(LoginDoctorDto dto) {
+        public LoginResponseDto GenerateJwt(LoginDto dto) {
             return _jwtService.GenerateJwt(dto);
         }
 

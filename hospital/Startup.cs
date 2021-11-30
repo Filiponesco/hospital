@@ -69,6 +69,9 @@ namespace hospital
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IValidator<CreateDoctorDto>, CreateDoctorDtoValidator>();
 
+            services.AddScoped<IPatientService, PatientService>();
+            services.AddScoped<IValidator<CreatePatientDto>, CreatePatientDtoValidator>();
+
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddHttpContextAccessor();

@@ -9,7 +9,7 @@ namespace hospital
     {
         public HospitalMappingProfile()
         {
-            CreateMap<User, DoctorDto>();
+            CreateMap<User, UserDto>();
         }
     }
 }

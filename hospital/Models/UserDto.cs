@@ -4,7 +4,7 @@ using hospital.Entities;
 
 namespace hospital.Models
 {
-    public class DoctorDto
+    public class UserDto
     {
         public string Email { get; set; }
         public string FirstName { get; set; }

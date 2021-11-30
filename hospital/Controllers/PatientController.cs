@@ -12,29 +12,29 @@ using Microsoft.Extensions.Logging;
 
 namespace hospital.Controllers
 {
-    [Route("doctor")]
+    [Route("patient")]
     [ApiController]
-    public class DoctorController : ControllerBase
+    public class PatientController : ControllerBase
     {
-        private readonly IDoctorService _doctorService;
+        private readonly IPatientService _patientService;
 
 
-        public DoctorController(IDoctorService doctorService)
+        public PatientController(IPatientService patientService)
         {
-            _doctorService = doctorService;
+            _patientService = patientService;
         }
-
-        [HttpPost("register")]
-        public ActionResult Register([FromBody] CreateDoctorDto dto)
+        [Authorize(Roles = "Doctor")]
+        [HttpPost("create")]
+        public ActionResult Register([FromBody] CreatePatientDto dto)
         {
-            int id = _doctorService.Create(dto);
-            return Created($"/Doctor/{id}", null);
+            int id = _patientService.Create(dto);
+            return Created($"/Patient/{id}", null);
         }
 
         [HttpPost("login")]
         public ActionResult Login([FromBody] LoginDto dto)
         {
-            LoginResponseDto response = _doctorService.GenerateJwt(dto);
+            LoginResponseDto response = _patientService.GenerateJwt(dto);
             return Ok(response);
         }
     }

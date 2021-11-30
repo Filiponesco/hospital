@@ -16,7 +16,7 @@ namespace hospital.Services
 {
     public interface IJwtService
     {
-        CreateDoctorResponseDto GenerateJwt(LoginDoctorDto dto);
+        LoginResponseDto GenerateJwt(LoginDto dto);
     }
     public class JwtService : IJwtService
     {
@@ -31,7 +31,7 @@ namespace hospital.Services
             _authenticationSettings = authenticationSettings;
             _mapper = mapper;
         }
-        public CreateDoctorResponseDto GenerateJwt(LoginDoctorDto dto)
+        public LoginResponseDto GenerateJwt(LoginDto dto)
         {
             var user = _context.Users
                 .Include(u => u.Role)
@@ -69,10 +69,10 @@ namespace hospital.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwt = tokenHandler.WriteToken(token);
-            return new CreateDoctorResponseDto()
+            return new LoginResponseDto()
             {
                 Token = jwt,
-                Doctor = _mapper.Map<DoctorDto>(user)
+                User = _mapper.Map<UserDto>(user)
             };
 
         }

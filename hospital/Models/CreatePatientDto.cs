@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace hospital.Models
 {
-    public class LoginDto
+    public class CreatePatientDto
     {
         [Required]
         [MaxLength(250)]
@@ -11,7 +11,14 @@ namespace hospital.Models
         public string Email { get; set; }
         [Required]
         [MaxLength(250)]
-        [MinLength(6)]
-        public string Password { get; set; }
+        [MinLength(1)]
+        public string FirstName { get; set; }
+        [Required]
+        [MaxLength(250)]
+        [MinLength(1)]
+        public string LastName { get; set; }
+        public readonly int RoleId = 2;
+
     }
+
 }

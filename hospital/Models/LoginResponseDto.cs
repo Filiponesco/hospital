@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace hospital.Models
 {
-    public class CreateDoctorResponseDto
+    public class LoginResponseDto
     {
         public string Token { get; set; }
-        public DoctorDto Doctor { get; set; }
+        public UserDto User { get; set; }
     }
 
 }
