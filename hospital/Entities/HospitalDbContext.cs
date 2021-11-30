@@ -15,6 +15,7 @@ Password=PolapPolap1;
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<MedicalRecord> MedicalRecords { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +33,7 @@ Password=PolapPolap1;
                 .Property(u => u.Name)
                 .IsRequired().HasMaxLength(250);
 
+            modelBuilder.Entity<MedicalRecord>();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
