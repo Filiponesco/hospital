@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using hospital.Entities;
 using hospital.Models;
 using hospital.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -15,6 +17,7 @@ namespace hospital.Controllers
     {
         private readonly IDoctorService _doctorService;
 
+
         public DoctorController(IDoctorService doctorService)
         {
             _doctorService = doctorService;
@@ -25,6 +28,13 @@ namespace hospital.Controllers
         {
             int id = _doctorService.Create(dto);
             return Created($"/Doctor/{id}", null);
+        }
+
+        [HttpPost("login")]
+        public ActionResult Login([FromBody] LoginDoctorDto dto)
+        {
+            CreateDoctorResponseDto response = _doctorService.GenerateJwt(dto);
+            return Ok(response);
         }
     }
 }

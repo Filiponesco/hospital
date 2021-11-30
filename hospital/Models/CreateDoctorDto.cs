@@ -6,7 +6,6 @@ namespace hospital.Models
     public class CreateDoctorDto
     {
         [Required]
-        [EmailAddress]
         public string Email { get; set; }
         [Required]
         [MaxLength(250)]
@@ -20,6 +19,8 @@ namespace hospital.Models
         [MaxLength(250)]
         [MinLength(1)]
         public string LastName { get; set; }
+        public readonly int RoleId = 7;
+
     }
 
 }
