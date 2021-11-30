@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using hospital.Entities;
 using hospital.Exceptions;
 using hospital.Helpers;
 using hospital.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace hospital.Services
 {
     public interface IPatientService {
         int Create(CreatePatientDto dto);
         LoginResponseDto GenerateJwt(LoginDto dto);
+        IEnumerable<PatientDto> GetAllFromDoctor();
     }
 
     public class PatientService : IPatientService
@@ -69,5 +73,22 @@ namespace hospital.Services
             return _jwtService.GenerateJwt(dto);
         }
 
+        public IEnumerable<PatientDto> GetAllFromDoctor()
+        {
+            int? doctorId = _userContextService.GetUserId;
+            var records = _dbContext
+                .MedicalRecords
+                .Include(m => m.Patient)
+                .Include(m => m.Patient.Role)
+                .ToList().FindAll(p => p.DoctorId == doctorId);
+
+            List<User> patients = new();
+            records.ForEach(r => patients.Add(r.Patient));
+
+
+            var patientDtos = _mapper.Map<List<PatientDto>>(patients);
+
+            return patientDtos;
+        }
     }
 }

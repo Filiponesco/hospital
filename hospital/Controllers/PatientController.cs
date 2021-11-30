@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using hospital.Entities;
+using hospital.Exceptions;
 using hospital.Models;
 using hospital.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +37,14 @@ namespace hospital.Controllers
         {
             LoginResponseDto response = _patientService.GenerateJwt(dto);
             return Ok(response);
+        }
+        [HttpGet]
+        [Authorize(Roles = "Doctor")]
+        public ActionResult<IEnumerable<PatientDto>> GetAllFromDoctor()
+        {
+            var patientDtos = _patientService.GetAllFromDoctor();
+
+            return Ok(patientDtos);
         }
     }
 }

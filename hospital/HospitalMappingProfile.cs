@@ -10,6 +10,7 @@ namespace hospital
         public HospitalMappingProfile()
         {
             CreateMap<User, UserDto>();
+            CreateMap<User, PatientDto>();
         }
     }
 }
