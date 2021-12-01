@@ -25,9 +25,9 @@ namespace hospital.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult Register([FromBody] CreateDoctorDto dto)
+        public ActionResult Register([FromBody] RegisterDoctorDto dto)
         {
-            int id = _doctorService.Create(dto);
+            int id = _doctorService.Register(dto);
             return Created($"/Doctor/{id}", null);
         }
 
@@ -36,6 +36,22 @@ namespace hospital.Controllers
         {
             LoginResponseDto response = _doctorService.GenerateJwt(dto);
             return Ok(response);
+        }
+        [Authorize(Roles = "Doctor")]
+        [HttpPost("patient")]
+        public ActionResult Register([FromBody] CreatePatientDto dto)
+        {
+            int id = _doctorService.CreatePatient(dto);
+            return Created($"/Patient/{id}", null);
+        }
+
+        [HttpGet("myPatients")]
+        [Authorize(Roles = "Doctor")]
+        public ActionResult<IEnumerable<PatientDto>> GetMyPatients()
+        {
+            var patientDtos = _doctorService.GetMyPatients();
+
+            return Ok(patientDtos);
         }
     }
 }

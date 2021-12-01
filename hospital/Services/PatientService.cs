@@ -12,9 +12,8 @@ using Microsoft.EntityFrameworkCore;
 namespace hospital.Services
 {
     public interface IPatientService {
-        int Create(CreatePatientDto dto);
         LoginResponseDto GenerateJwt(LoginDto dto);
-        IEnumerable<PatientDto> GetAllFromDoctor();
+        int Register(RegisterPatientDto dto);
     }
 
     public class PatientService : IPatientService
@@ -23,7 +22,7 @@ namespace hospital.Services
         private readonly IMapper _mapper;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IJwtService _jwtService;
-            private readonly IUserContextService _userContextService;
+        private readonly IUserContextService _userContextService;
         public PatientService(HospitalDbContext dbContext, IMapper mapper, IPasswordHasher<User> passwordHasher, IJwtService jwtService, IUserContextService userContextService)
         {
             _dbContext = dbContext;
@@ -33,62 +32,24 @@ namespace hospital.Services
             _userContextService = userContextService;
         }
 
-        public int Create(CreatePatientDto dto)
-        {
-
-            var newUser = new User()
-            {
-                Email = dto.Email,
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                RoleId = dto.RoleId
-            };
-            var hashedPassword = _passwordHasher.HashPassword(newUser, dto.Password);
-
-            newUser.Password = hashedPassword;
-            var savedUser = _dbContext.Users.Add(newUser);
-
-            int? doctorId = _userContextService.GetUserId;
-            if (doctorId == null)
-            {
-                throw new ForbidException();
-            }
-
-            var savedUserId = savedUser.Property(u => u.Id).CurrentValue;
-
-            var medicalRecord = new MedicalRecord
-            {
-                PatientId = savedUserId,
-                DoctorId = (int)doctorId,
-                LastUpdateDate = DateTime.Now,
-            };
-
-            _dbContext.MedicalRecords.Add(medicalRecord);
-
-            _dbContext.SaveChanges();
-            return savedUserId;
-        }
-
         public LoginResponseDto GenerateJwt(LoginDto dto) {
             return _jwtService.GenerateJwt(dto);
         }
 
-        public IEnumerable<PatientDto> GetAllFromDoctor()
+        public int Register(RegisterPatientDto dto)
         {
-            int? doctorId = _userContextService.GetUserId;
-            var records = _dbContext
-                .MedicalRecords
-                .Include(m => m.Patient)
-                .Include(m => m.Patient.Role)
-                .ToList().FindAll(p => p.DoctorId == doctorId);
+            var patient = _dbContext.Users.FirstOrDefault(u => u.Email == dto.Email && u.RoleId == 2 && u.Password == null);
 
-            List<User> patients = new();
-            records.ForEach(r => patients.Add(r.Patient));
+            if (patient is null) {
 
+                throw new NotFoundException("Not found patient. Before register, doctor has to create an account for patient with this email.");
+            }
 
-            var patientDtos = _mapper.Map<List<PatientDto>>(patients);
+            var hashedPassword = _passwordHasher.HashPassword(patient, dto.Password);
 
-            return patientDtos;
+            patient.Password = hashedPassword;
+            _dbContext.SaveChanges();
+            return patient.Id;
         }
     }
 }
