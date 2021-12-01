@@ -25,7 +25,7 @@ namespace hospital.Controllers
             _patientService = patientService;
         }
         [Authorize(Roles = "Doctor")]
-        [HttpPost("create")]
+        [HttpPost("doctor/create")]
         public ActionResult Register([FromBody] CreatePatientDto dto)
         {
             int id = _patientService.Create(dto);
@@ -38,7 +38,7 @@ namespace hospital.Controllers
             LoginResponseDto response = _patientService.GenerateJwt(dto);
             return Ok(response);
         }
-        [HttpGet]
+        [HttpGet("doctor")]
         [Authorize(Roles = "Doctor")]
         public ActionResult<IEnumerable<PatientDto>> GetAllFromDoctor()
         {

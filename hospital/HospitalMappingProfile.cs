@@ -11,6 +11,7 @@ namespace hospital
         {
             CreateMap<User, UserDto>();
             CreateMap<User, PatientDto>();
+            CreateMap<MedicalRecord, MedicalRecordDto>();
         }
     }
 }
