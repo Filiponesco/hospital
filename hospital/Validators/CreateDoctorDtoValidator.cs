@@ -6,7 +6,7 @@ using hospital.Models;
 
 namespace hospital.Validators
 {
-    public class CreateDoctorDtoValidator : AbstractValidator<CreateDoctorDto>
+    public class CreateDoctorDtoValidator : AbstractValidator<RegisterDoctorDto>
     {
         public CreateDoctorDtoValidator(HospitalDbContext dbContext)
         {

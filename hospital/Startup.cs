@@ -67,7 +67,7 @@ namespace hospital
 
 
             services.AddScoped<IDoctorService, DoctorService>();
-            services.AddScoped<IValidator<CreateDoctorDto>, CreateDoctorDtoValidator>();
+            services.AddScoped<IValidator<RegisterDoctorDto>, CreateDoctorDtoValidator>();
 
             services.AddScoped<IPatientService, PatientService>();
             services.AddScoped<IValidator<CreatePatientDto>, CreatePatientDtoValidator>();

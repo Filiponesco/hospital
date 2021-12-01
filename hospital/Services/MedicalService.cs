@@ -83,9 +83,15 @@ namespace hospital.Services
             record.Bmi = updateMedicalRecord.Bmi;
             record.DiabetesPedigreeFunction = updateMedicalRecord.DiabetesPedigreeFunction;
             record.Age = updateMedicalRecord.Age;
-            record.Outcome = null;
-            record.Filled = false;
             record.LastUpdateDate = DateTime.Now;
+            // TODO get from API Hubert
+
+            var rand = new Random();
+            var randomBool = rand.NextDouble() >= 0.5;
+
+            record.Outcome = randomBool;
+            record.Filled = true;
+
             _dbContext.SaveChanges();
 
             return _mapper.Map<MedicalRecordDto>(record);
