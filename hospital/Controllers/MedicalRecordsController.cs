@@ -24,11 +24,27 @@ namespace hospital.Controllers
         {
             _medicalService = medicalService;
         }
-        [HttpGet("{patientId}")]
-        [Authorize(Roles = "Doctor")] // TODO authorize: only for doctor for specified patient
+        [HttpGet("doctor/{patientId}")]
+        [Authorize(Roles = "Doctor")]
         public ActionResult<PatientDto> Get([FromRoute] int patientId)
         {
             var patientDto = _medicalService.Get(patientId);
+
+            return Ok(patientDto);
+        }
+        [HttpGet("patient")]
+        [Authorize(Roles = "Patient")]
+        public ActionResult<PatientDto> Get()
+        {
+            var patientDto = _medicalService.Get();
+
+            return Ok(patientDto);
+        }
+        [HttpPut("doctor/{patientId}")]
+        [Authorize(Roles = "Doctor")]
+        public ActionResult<PatientDto> Update([FromRoute] int patientId, UpdateMedicalRecordDto updateMedicalRecord)
+        {
+            var patientDto = _medicalService.Update(patientId, updateMedicalRecord);
 
             return Ok(patientDto);
         }
