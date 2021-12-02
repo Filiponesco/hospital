@@ -18,6 +18,7 @@
     <None Remove="Validators\" />
     <None Remove="Helpers\" />
     <None Remove="Exceptions\" />
+    <None Remove="Middleware\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
@@ -38,5 +39,6 @@
     <Folder Include="Validators\" />
     <Folder Include="Helpers\" />
     <Folder Include="Exceptions\" />
+    <Folder Include="Middleware\" />
   </ItemGroup>
 </Project>
