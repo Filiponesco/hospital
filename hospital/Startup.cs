@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using RestaurantAPI.Middleware;
 
 namespace hospital
 {
@@ -74,6 +75,8 @@ namespace hospital
 
             services.AddScoped<IMedicalService, MedicalService>();
 
+            services.AddScoped<ErrorHandlingMiddleware>();
+
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddHttpContextAccessor();
@@ -89,6 +92,8 @@ namespace hospital
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseAuthentication();
 
