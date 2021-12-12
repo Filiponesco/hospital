@@ -42,9 +42,9 @@ namespace hospital.Controllers
         }
         [HttpPut("doctor/{patientId}")]
         [Authorize(Roles = "Doctor")]
-        public ActionResult<PatientDto> Update([FromRoute] int patientId, UpdateMedicalRecordDto updateMedicalRecord)
+        public async Task<ActionResult<PatientDto>> UpdateAsync([FromRoute] int patientId, UpdateMedicalRecordDto updateMedicalRecord)
         {
-            var patientDto = _medicalService.Update(patientId, updateMedicalRecord);
+            var patientDto = await _medicalService.UpdateAsync(patientId, updateMedicalRecord);
 
             return Ok(patientDto);
         }

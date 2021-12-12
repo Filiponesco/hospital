@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using AutoMapper;
 using hospital.Entities;
 using hospital.Exceptions;
@@ -11,10 +13,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hospital.Services
 {
-    public interface IMedicalService {
+    public interface IMedicalService
+    {
         MedicalRecordDto Get(int id);
         MedicalRecordDto Get();
-        MedicalRecordDto Update(int id, UpdateMedicalRecordDto updateMedicalRecord);
+        Task<MedicalRecordDto> UpdateAsync(int id, UpdateMedicalRecordDto updateMedicalRecord);
     }
 
     public class MedicalService : IMedicalService
@@ -23,17 +26,20 @@ namespace hospital.Services
         private readonly IMapper _mapper;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IJwtService _jwtService;
-            private readonly IUserContextService _userContextService;
-        public MedicalService(HospitalDbContext dbContext, IMapper mapper, IPasswordHasher<User> passwordHasher, IJwtService jwtService, IUserContextService userContextService)
+        private readonly IUserContextService _userContextService;
+        private readonly HttpClient _client;
+        public MedicalService(HospitalDbContext dbContext, IMapper mapper, IPasswordHasher<User> passwordHasher, IJwtService jwtService, IUserContextService userContextService,
+            HttpClient client)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _passwordHasher = passwordHasher;
             _jwtService = jwtService;
             _userContextService = userContextService;
+            _client = client;
         }
 
-     
+
         public MedicalRecordDto Get(int id)
         {
             var patient = _dbContext.Users.FirstOrDefault(u => u.Id == id && u.Role.Name == "Patient");
@@ -61,7 +67,7 @@ namespace hospital.Services
             return _mapper.Map<MedicalRecordDto>(record);
         }
 
-        public MedicalRecordDto Update(int id, UpdateMedicalRecordDto updateMedicalRecord)
+        public async Task<MedicalRecordDto> UpdateAsync(int id, UpdateMedicalRecordDto updateMedicalRecord)
         {
             var patient = _dbContext.Users.FirstOrDefault(u => u.Id == id && u.Role.Name == "Patient");
             if (patient is null)
@@ -84,12 +90,23 @@ namespace hospital.Services
             record.DiabetesPedigreeFunction = updateMedicalRecord.DiabetesPedigreeFunction;
             record.Age = updateMedicalRecord.Age;
             record.LastUpdateDate = DateTime.Now;
-            // TODO get from API Hubert
+            var values = new Dictionary<string, string>
+{
 
-            var rand = new Random();
-            var randomBool = rand.NextDouble() >= 0.5;
+               { "Pregnancies", record.Pregnancies.ToString()},
+                { "Glucose", record.Glucose.ToString() },
+                { "SkinThickness", record.SkinThickness.ToString() },
+                { "BMI", record.Bmi.ToString() },
+                { "Age", record.Age.ToString() }
+};
 
-            record.Outcome = randomBool;
+            var content = new FormUrlEncodedContent(values);
+
+            var response = await _client.PostAsync("https://predictorknnpolsl.azurewebsites.net/predict", content);
+
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            record.Outcome = responseString == "1";
             record.Filled = true;
 
             _dbContext.SaveChanges();
